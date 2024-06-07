@@ -25,8 +25,11 @@ public class SocketClient {
 			// Fluxo de dados para envio
 			PrintStream printStream =  new PrintStream(clientSocket.getOutputStream());
 			
+			
+			System.out.println("Fale oi :)");
+			
 			String msg = null;
-			System.out.println("Envie sua mensagem :)");
+		
 			do {
 				
 				msg =  scannerPrompt.nextLine();
@@ -39,9 +42,6 @@ public class SocketClient {
 				
 			}while(msg.length() != 0 || msg != null);
 			
-			System.out.println("Cliente iniciado na porta: "+ PORT_CLIENT);
-			
-			printStream.println("Olá");
 			
 			//  Fechando conexão com cliente
 			clientSocket.close();
