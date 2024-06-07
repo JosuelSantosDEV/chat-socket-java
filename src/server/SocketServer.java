@@ -26,6 +26,7 @@ public class SocketServer {
 					 
 					 ResolveClient resolvCli = new ResolveClient(serverSocket.accept());
 					 resolvCli.start();
+					 
 					 /*
 					 Socket socketClient =  serverSocket.accept();
 					 System.out.println("Cliente conectado: "+ socketClient.getInetAddress());

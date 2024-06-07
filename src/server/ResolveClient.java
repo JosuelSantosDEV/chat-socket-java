@@ -1,15 +1,25 @@
 package server;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+
+
 
 public class ResolveClient extends Thread{
 	
 	public Socket cliente;
-
+	public String nameCliente;
+	Scanner getDataClient; // Obtem dados do cliente
+	PrintStream outputDatas ; // Envia dados ao cliente
+	private static final List<ResolveClient> users = new ArrayList<ResolveClient>();
+	
 	public ResolveClient(Socket cli) {
 		this.cliente = cli;
 	}
@@ -19,22 +29,30 @@ public class ResolveClient extends Thread{
 		System.out.println("Cliente conectado com thread (" + this.getId() + 
 				") : " + cliente.getInetAddress());
 		
-		// Obtendo dados do prompt
-		Scanner inputPrompt = new Scanner(System.in);
-		Scanner getDataClient; // cliente está digitando ou vai digitar
-
-		InputStreamReader fluxoDados;
+		
+		
 		
 		try {
-			getDataClient = new Scanner(cliente.getInputStream());
-			PrintStream outputDatas = new PrintStream(cliente.getOutputStream());
-
+			
+			getDataClient = new Scanner(cliente.getInputStream()); // Obtem dados vindo do cliente
+			outputDatas = new PrintStream(cliente.getOutputStream()); // Envia dados ao cliente
+			
+			printMsg("Informe seu nome de Usuário: ");
+			getDataClient.nextLine();
+			nameCliente = getDataClient.nextLine();
+			System.out.println("Name client: " + nameCliente);
+			printMsg("Server: Seja bem vindo "+ nameCliente);
+			
+			users.add(this);
+			
 			while (getDataClient.hasNextLine()) {
 				String msgChegadaCliente = getDataClient.nextLine();
 				System.out.println("Client: " + msgChegadaCliente);
-				String msgResposta = inputPrompt.nextLine();
-				outputDatas.println(msgResposta);
-				System.out.println("-----------------------------------");
+				for (ResolveClient rc : users) {
+					if(rc.nameCliente != this.nameCliente) rc.printMsg(msgChegadaCliente);
+					System.out.println("Users name: " + rc.nameCliente);
+				}
+				System.out.println("Tamanho lista: " + users.size());
 			}
 
 			System.out.println("Cliente Finalizado: " + cliente.getInetAddress() + 
@@ -50,4 +68,9 @@ public class ResolveClient extends Thread{
 		super.run();
 	}
 
+	public void printMsg(String msg) {
+		outputDatas.println(msg);
+	}
+	
+	
 }

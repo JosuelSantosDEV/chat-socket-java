@@ -34,8 +34,8 @@ public class SocketClient {
 				printStream.println(msg);
 				// Obtendo resposta do server
 				String responseServer = conectionData.nextLine();
-				System.out.println("Server: "+ responseServer);
-				System.out.println("----------------------");
+				System.out.println(responseServer);
+				
 				
 			}while(msg.length() != 0 || msg != null);
 			
